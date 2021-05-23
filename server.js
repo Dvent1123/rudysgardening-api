@@ -17,6 +17,8 @@ mongoose
 
 //importing routes
 const authRoutes = require('./routes/auth')
+const userRoutes = require('./routes/user')
+const paymentRoutes = require('./routes/payment')
 
 //middleware
 app.use(express.json());
@@ -27,6 +29,8 @@ if(process.env.NODE_ENV == 'development'){
 }
 
 app.use('/api', authRoutes)
+app.use('/api', userRoutes)
+app.use('/api', paymentRoutes)
 
 
 const PORT = 5000 || process.env.PORT

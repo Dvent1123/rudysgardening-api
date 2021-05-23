@@ -1,5 +1,4 @@
 const { newUser } = require('../models/user')
-const {paymentFromUser } = require('../models/user')
 const jwt = require('jsonwebtoken')
 const expressJWT = require('express-jwt')
 
@@ -19,15 +18,6 @@ exports.signup = (req, res) => {
             })
         }
     })
-
-    let service = "New Service"
-    let amount = 10
-    let total = 10
-    let paid = false
-    let user = new newUser({name, email, password})
-    let paymentReal = new paymentFromUser({service, amount, total, paid})
-
-    user.payments.push(paymentReal)
 
     user.save((err, success) => {
         if(err){
