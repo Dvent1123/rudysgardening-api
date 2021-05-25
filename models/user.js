@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const crypto = require('crypto')
 
 const PaymentSchema = new mongoose.Schema({
+    user: String,
     service: String,
     amount: Number,
     total: Number,

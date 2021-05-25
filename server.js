@@ -19,9 +19,24 @@ mongoose
 const authRoutes = require('./routes/auth')
 const userRoutes = require('./routes/user')
 const paymentRoutes = require('./routes/payment')
+const stripeRoutes = require('./routes/stripe')
+
 
 //middleware
-app.use(express.json());
+//checks to see if the request comes from webhooks
+app.use(
+    express.json({
+      // We need the raw body to verify webhook signatures.
+      // Let's compute it only when hitting the Stripe webhook endpoint.
+      verify: function (req, res, buf) {
+        if (req.originalUrl.startsWith('/api/stripe/webhook')) {
+          req.rawBody = buf.toString();
+        }
+      },
+    })
+  );
+  
+  
 app.use(express.urlencoded({ extended: true }));
     
 if(process.env.NODE_ENV == 'development'){
@@ -31,6 +46,7 @@ if(process.env.NODE_ENV == 'development'){
 app.use('/api', authRoutes)
 app.use('/api', userRoutes)
 app.use('/api', paymentRoutes)
+app.use('/api', stripeRoutes)
 
 
 const PORT = 5000 || process.env.PORT
