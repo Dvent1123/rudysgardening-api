@@ -11,7 +11,7 @@ exports.create = (req, res) => {
             })
         }
         //create payment
-        let payment = paymentFromUser({email, service, amount, total, paid_Status, due})
+        let payment = paymentFromUser({user: email, service, amount, total, paid_Status, due})
         user.payments.push(payment)
     
         user.save((err, success) => {
@@ -81,4 +81,30 @@ exports.allPaymentsForAdmin = (req, res) => {
             unpaid: unpaidPayments
         })
     })
+}
+
+//updates the bill from paid = false to paid = true
+exports.updateBillingStatus = (req, res) => {
+    const { id, email } = req.body
+        newUser.findOne({email: email, "payments._id": id}, (err, user) => {
+            if(err || !user) {
+                return res.status(400).json({
+                    error: 'Payment not found'
+                })
+            }
+            user.payments[0].paid_Status = true
+
+            user.save((err, success) => {
+                if(err){
+                    return res.status(400).json({
+                        error: err
+                    })
+                }
+            
+                res.json({
+                    message: 'Bill Status Updated!'
+                })
+            })
+
+        })
 }

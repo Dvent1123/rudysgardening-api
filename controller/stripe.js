@@ -24,7 +24,7 @@ exports.checkoutSession = async (req, res) => {
 
 //creates checkout session
 exports.createCheckoutSession = async (req, res) => {
-    const {price} = req.body
+    const { price, id } = req.body
 
     const domainURL = process.env.CLIENT_URL
     const pmTypes = (process.env.PAYMENT_METHOD_TYPES || 'card').split(',').map((m) => m.trim());
@@ -37,7 +37,7 @@ exports.createCheckoutSession = async (req, res) => {
             quantity: 1
         }],
         //when it goes to this success url pass in the item id so we can go and update the item
-        success_url: `${domainURL}/home`,
+        success_url: `${domainURL}/success/${id}`,
         cancel_url: `${domainURL}/settings`,
     })
 
